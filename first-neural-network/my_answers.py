@@ -68,12 +68,11 @@ class NeuralNetwork(object):
         '''
         #### Implement the forward pass here ####
         ### Forward pass ###
-        
-        hidden_inputs = np.dot(X , self.weights_input_to_hidden)
+        hidden_inputs = np.dot(X, self.weights_input_to_hidden) # signals into hidden layer
         hidden_outputs = self.activation_function(hidden_inputs) # signals from hidden layer
     
         final_inputs = np.dot(hidden_outputs, self.weights_hidden_to_output) # signals into final output layer
-        final_outputs = final_inputs
+        final_outputs = final_inputs # signals from final output layer 
         
         return final_outputs, hidden_outputs
 
@@ -96,12 +95,12 @@ class NeuralNetwork(object):
                 
         # Hidden Errors
         hidden_error = self.weights_hidden_to_output * error
-        hidden_grad = (hidden_outputs * (1 - hidden_outputs))
+        hidden_grad = hidden_outputs * (1 - hidden_outputs)
         hidden_error_term = hidden_error * hidden_grad.reshape(hidden_grad.shape[0],1)
         
         # Weights
         delta_weights_i_h += (X * hidden_error_term).T
-        delta_weights_h_o += (hidden_outputs.reshape(hidden_outputs.shape[0],1) * error)
+        delta_weights_h_o += hidden_outputs.reshape(hidden_outputs.shape[0],1) * error
         
         return delta_weights_i_h, delta_weights_h_o
 
@@ -115,11 +114,8 @@ class NeuralNetwork(object):
             n_records: number of records
 
         '''
-        
         self.weights_hidden_to_output += self.lr * delta_weights_h_o / n_records
-        # update hidden-to-output weights with gradient descent step
         self.weights_input_to_hidden += self.lr * delta_weights_i_h / n_records
-        # update input-to-hidden weights with gradient descent step
 
     def run(self, features):
         ''' Run a forward pass through the network with input features 
@@ -129,7 +125,7 @@ class NeuralNetwork(object):
             features: 1D array of feature values
         '''
         # Implement the forward pass here ####
-        hidden_inputs = np.dot(features , self.weights_input_to_hidden) # signals into hidden layer
+        hidden_inputs = np.dot(features, self.weights_input_to_hidden) # signals into hidden layer
         hidden_outputs = self.activation_function(hidden_inputs) # signals from hidden layer
         
         final_inputs = np.dot(hidden_outputs, self.weights_hidden_to_output) # signals into final output layer
